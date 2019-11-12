@@ -36,16 +36,17 @@ public class NotaRepository {
        new insertAsyncTask(notaDao).execute(notaEntity);
     }
 
+    //Ejecutamos la insercion en segundo plano para no bloquear el hilo principal de la app
     private static class insertAsyncTask extends AsyncTask<NotaEntity, Void, Void> {
         private NotaDao notaDaoAsyncTask;
 
-        insertAsyncTask(NotaDao dao) {
+        insertAsyncTask(NotaDao dao) {  //Creamos constructor para poder instanciarlo
             notaDaoAsyncTask = dao;
         }
 
         @Override
         protected Void doInBackground(NotaEntity... notaEntities) {
-            notaDaoAsyncTask.insert(notaEntities[0]);
+            notaDaoAsyncTask.insert(notaEntities[0]); //Insertara solo el primer elemento de los parametros que nos estan pasando
             return null;
         }
     }

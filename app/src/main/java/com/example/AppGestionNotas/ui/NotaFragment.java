@@ -4,6 +4,9 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -13,6 +16,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.AppGestionNotas.NuevaNotaDialogFragment;
+import com.example.AppGestionNotas.NuevaNotaDialogViewModel;
 import com.example.AppGestionNotas.R;
 import com.example.AppGestionNotas.db.entity.NotaEntity;
 
@@ -29,6 +34,7 @@ public class NotaFragment extends Fragment {
     private int mColumnCount = 2;
     private List<NotaEntity> notaEntityList;
     private MyNotaRecyclerViewAdapter notaRecyclerViewAdapter;
+    private NuevaNotaDialogViewModel notaViewModel;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -78,18 +84,28 @@ public class NotaFragment extends Fragment {
             }
 
             notaEntityList = new ArrayList<>();
-            notaEntityList.add(new NotaEntity("Lista de la compra", "Comprar pan tostado", true, android.R.color.holo_blue_light));
-            notaEntityList.add(new NotaEntity("Recordar", "He aparcado el coche en la calle Republica argentina, no olvidarme de pagar el parquimetro", false, android.R.color.holo_green_light));
-            notaEntityList.add(new NotaEntity("Cumpleanos (fiesta)", "No olvidar las velas", true, android.R.color.holo_orange_light));
+
 
             notaRecyclerViewAdapter = new MyNotaRecyclerViewAdapter(notaEntityList, getActivity());
             recyclerView.setAdapter(notaRecyclerViewAdapter);
+
+            lanzarViewModel();
 
         }
         return view;
     }
 
-  //El primer metodo que se lanza cuando insertamos un fragmento
+    private void lanzarViewModel() {
+        notaViewModel = ViewModelProviders.of(getActivity()).get(NuevaNotaDialogViewModel.class);
+        notaViewModel.getAllNotas().observe(getActivity(), new Observer<List<NotaEntity>>() {
+            @Override
+            public void onChanged(List<NotaEntity> notaEntities) {
+                 notaRecyclerViewAdapter.setNuevasNotas(notaEntities);
+            }
+        });
+    }
+
+    //El primer metodo que se lanza cuando insertamos un fragmento
   /**  @Override
     public void onAttach(Context context) {
         super.onAttach(context);
