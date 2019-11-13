@@ -60,8 +60,9 @@ public class NuevaNotaDialogFragment extends DialogFragment {
                                 break;
                         }
 
-                        boolean esFavorita = swNotaFavorita.isChecked();
+                        boolean esFavorita = swNotaFavorita.isChecked(); //Revisar si la nota es favorita o no
 
+                        //Comunicar al viewmodel el nuevo dato
                         NuevaNotaDialogViewModel mViewModel = ViewModelProviders.of(getActivity()).get(NuevaNotaDialogViewModel.class);
                         mViewModel.insertarNota(new NotaEntity(titulo, contenido, esFavorita, color));
                         dialog.dismiss();
@@ -74,7 +75,7 @@ public class NuevaNotaDialogFragment extends DialogFragment {
                         dialog.dismiss();
                     }
                 });
-
+        //Se utiliza para introducir un layout
         LayoutInflater inflater = getActivity().getLayoutInflater();
         view = inflater.inflate(R.layout.nueva_nota_dialog_fragment, null);
 
@@ -85,7 +86,7 @@ public class NuevaNotaDialogFragment extends DialogFragment {
 
 
 
-        builder.setView(view);
+        builder.setView(view); //añidimos el cuadro de dialogo a la vista
 
         // Create the AlertDialog object and return it
         return builder.create();

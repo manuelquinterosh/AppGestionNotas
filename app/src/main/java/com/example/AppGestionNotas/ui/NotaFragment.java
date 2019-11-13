@@ -3,7 +3,9 @@ package com.example.AppGestionNotas.ui;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -13,6 +15,9 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -60,6 +65,9 @@ public class NotaFragment extends Fragment {
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
+
+        //Indicamos que el fragment tiene un menu de opciones propio
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -89,7 +97,7 @@ public class NotaFragment extends Fragment {
             notaRecyclerViewAdapter = new MyNotaRecyclerViewAdapter(notaEntityList, getActivity());
             recyclerView.setAdapter(notaRecyclerViewAdapter);
 
-            lanzarViewModel();
+            lanzarViewModel(); //Metodo que se va encargar de decirnos si hay nuevos datos y en el refrescamos la lista de datos
 
         }
         return view;
@@ -100,28 +108,32 @@ public class NotaFragment extends Fragment {
         notaViewModel.getAllNotas().observe(getActivity(), new Observer<List<NotaEntity>>() {
             @Override
             public void onChanged(List<NotaEntity> notaEntities) {
+                //en el momento que hay un cambio en este metodo onChanged vamos recivir la nueva lista de notas
                  notaRecyclerViewAdapter.setNuevasNotas(notaEntities);
             }
         });
     }
 
-    //El primer metodo que se lanza cuando insertamos un fragmento
-  /**  @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof NotasInteractionListener) {
-            mListener = (NotasInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement NotasInteractionListener");
-        }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.options_menu_nota_fragment, menu);
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }**/
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_add_nota:
+                mostrarDialogoNuevaNota();
+                return true;
+                default:
+                    return super.onOptionsItemSelected(item);
+        }
+    }
 
-
+    private void mostrarDialogoNuevaNota() {
+        FragmentManager fm = getActivity().getSupportFragmentManager();
+        NuevaNotaDialogFragment dialogNuevaNota = new NuevaNotaDialogFragment();
+        dialogNuevaNota.show(fm, "NuevaNotaDialogFragment");
+    }
 }

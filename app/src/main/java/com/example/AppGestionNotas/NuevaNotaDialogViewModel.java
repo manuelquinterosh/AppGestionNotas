@@ -16,7 +16,7 @@ public class NuevaNotaDialogViewModel extends AndroidViewModel {
     private LiveData<List<NotaEntity>> allNotas;
     private NotaRepository notaRepository;
 
-    public NuevaNotaDialogViewModel(Application application) {
+    public NuevaNotaDialogViewModel(Application application) { //Creamos un constructor para poder instanciar este viewModel
         super(application);
 
         notaRepository = new NotaRepository(application);

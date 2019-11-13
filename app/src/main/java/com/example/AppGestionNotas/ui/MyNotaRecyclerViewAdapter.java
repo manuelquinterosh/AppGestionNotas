@@ -57,8 +57,8 @@ public class MyNotaRecyclerViewAdapter extends RecyclerView.Adapter<MyNotaRecycl
         return mValues.size();
     }
 
-    public void setNuevasNotas(List<NotaEntity> nuevasNotas) {
-        this.mValues = nuevasNotas;
+    public void setNuevasNotas(List<NotaEntity> nuevasNotas) {  //Metodo para actualizar el adapter
+        this.mValues = nuevasNotas; //A la lista de notas le asignamos las nuevas notas
         notifyDataSetChanged();
     }
 
